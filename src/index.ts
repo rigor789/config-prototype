@@ -18,25 +18,39 @@ import {
 	SyntaxKind
 } from "ts-morph";
 
-export class ConfigTransformer {
+type SupportedConfigValues = string | number | boolean;
+
+interface IConfigTransformer {
+
+	/**
+	 * Sets or updates the value at `path` and returns the updated content
+	 * @param {string} path path to the property, supports dot notation.
+	 * @param {SupportedConfigValues} value the value to set at `path`.
+	 * @returns {string} the updated content
+	 */
+	setValue(path: string, value: SupportedConfigValues): string;
+}
+
+export class ConfigTransformer implements IConfigTransformer {
 	private project: Project
 	private config: SourceFile
 	private readonly scriptKind: ScriptKind
 
-	constructor(configContent) {
+
+	constructor(content: string) {
 		this.project = new Project({
 			compilerOptions: {
 				allowJs: true,
 			},
 
 		});
-		this.scriptKind = configContent.includes('module.exports') ? ScriptKind.JS : ScriptKind.TS
-		this.config = this.project.createSourceFile('nativescript.config.ts', configContent, {
+		this.scriptKind = content.includes('module.exports') ? ScriptKind.JS : ScriptKind.TS
+		this.config = this.project.createSourceFile('nativescript.config.ts', content, {
 			scriptKind: this.scriptKind
 		})
 	}
 
-	getDefaultExportValue(): ObjectLiteralExpression {
+	private getDefaultExportValue(): ObjectLiteralExpression {
 		let exportValue;
 		if (this.scriptKind === ScriptKind.JS) {
 			this.config.getStatements().find(statement => {
@@ -66,7 +80,7 @@ export class ConfigTransformer {
 		return exportValue
 	}
 
-	getProperty(key: string, parent: ObjectLiteralExpression = null): ObjectLiteralElementLike {
+	private getProperty(key: string, parent: ObjectLiteralExpression = null): ObjectLiteralElementLike {
 		if (key.includes('.')) {
 			const parts = key.split('.')
 			let property = this.getProperty(parts.shift())
@@ -84,7 +98,7 @@ export class ConfigTransformer {
 		return this.getProperty(key, this.getDefaultExportValue())
 	}
 
-	setInitializerValue(initializer, newValue) {
+	private setInitializerValue(initializer, newValue) {
 		if (Node.isStringLiteral(initializer)) {
 			return (initializer as StringLiteral).setLiteralValue(newValue)
 		}
@@ -104,7 +118,7 @@ export class ConfigTransformer {
 		throw new Error('Unsupported value type: ' + initializer.getKindName())
 	}
 
-	getInitializerValue(initializer) {
+	private getInitializerValue(initializer) {
 		if (Node.isStringLiteral(initializer)) {
 			return (initializer as StringLiteral).getLiteralValue()
 		}
@@ -124,21 +138,21 @@ export class ConfigTransformer {
 		throw new Error('Unsupported value type: ' + initializer.getKindName())
 	}
 
-	getIdentifierValue(identifier: Identifier) {
+	private getIdentifierValue(identifier: Identifier) {
 		const decl = this.config.getVariableDeclarationOrThrow(identifier.getText())
 		const initializer = decl.getInitializerOrThrow()
 
 		return this.getInitializerValue(initializer)
 	}
 
-	setIdentifierValue(identifier: Identifier, newValue) {
+	private setIdentifierValue(identifier: Identifier, newValue) {
 		const decl = this.config.getVariableDeclarationOrThrow(identifier.getText())
 		const initializer = decl.getInitializerOrThrow()
 
 		this.setInitializerValue(initializer, newValue)
 	}
 
-	getPropertyValue(objectProperty: ObjectLiteralElementLike) {
+	private getPropertyValue(objectProperty: ObjectLiteralElementLike) {
 		let initializer
 		if (objectProperty instanceof PropertyAssignment || objectProperty instanceof ShorthandPropertyAssignment) {
 			initializer = objectProperty.getInitializer()
@@ -166,7 +180,7 @@ export class ConfigTransformer {
 		}
 	}
 
-	setPropertyValue(objectProperty, newValue) {
+	private setPropertyValue(objectProperty, newValue) {
 		let initializer
 		if (objectProperty instanceof PropertyAssignment || objectProperty instanceof ShorthandPropertyAssignment) {
 			initializer = objectProperty.getInitializer()
@@ -177,17 +191,22 @@ export class ConfigTransformer {
 		this.setInitializerValue(initializer, newValue)
 	}
 
-	getFullText() {
+	private getFullText() {
 		return this.config.getFullText()
 	}
 
+	/**
+	 * @internal
+	 */
 	getValue(key) {
 		return this.getPropertyValue(this.getProperty(key))
 	}
 
-	setValue(key, value) {
+	public setValue(key: string, value: SupportedConfigValues): string {
 		const property = this.getProperty(key);
 
 		this.setPropertyValue(property, value)
+
+		return this.getFullText()
 	}
 }
