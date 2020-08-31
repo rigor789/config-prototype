@@ -1,0 +1,7 @@
+import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	android: {
+		maxLogcatObjectSize: 500,
+	}
+} as NativeScriptConfig;

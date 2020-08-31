@@ -1,0 +1,15 @@
+module.exports = {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		codeCache: true,
+		maxLogcatObjectSize: 500,
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+}

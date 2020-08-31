@@ -1,0 +1,3 @@
+import {NativeScriptConfig} from '@nativescript/core';
+
+export const config: NativeScriptConfig = {}

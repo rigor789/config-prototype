@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConfigTransformer throws if variable is not defined 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+let myAppId = 'org.nativescript' + '.myApp'
+
+export default {
+	id: myAppId,
+	// @ts-ignore
+	appResourcesPath: nonExistentVariable,
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer throws if variable value is not supported 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+let myAppId = 'org.nativescript' + '.myApp'
+
+export default {
+	id: myAppId,
+	// @ts-ignore
+	appResourcesPath: nonExistentVariable,
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer throws when the default export is not an object 1`] = `
+"export default 'foo'
+"
+`;
+
+exports[`ConfigTransformer throws when there is no default export 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export const config: NativeScriptConfig = {}
+"
+`;
+
+exports[`ConfigTransformer works with module exports 1`] = `
+"module.exports = {
+	id: 'new.id',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		codeCache: false,
+		maxLogcatObjectSize: 1000,
+		deep: {
+			nested: {
+				value: 'changed'
+			}
+		}
+	}
+}
+"
+`;
+
+exports[`ConfigTransformer works with multiple module exports 1`] = `
+"module.exports.foo = 'bar'
+
+module.exports = {
+	id: 'new.id',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		codeCache: true,
+		maxLogcatObjectSize: 500,
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+}
+"
+`;
+
+exports[`ConfigTransformer writes boolean values 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	android: {
+		codeCache: false,
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer writes chained variable value 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+const baseId = 'new.id'
+const myAppId = baseId
+
+export default {
+	id: myAppId,
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer writes deeply nested string values 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'changed'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer writes nested string values 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'changed',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer writes numeric values 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	android: {
+		maxLogcatObjectSize: 1000,
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer writes string values 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'new.id',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer writes variable value 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+const myAppId = 'new.id'
+
+export default {
+	id: myAppId,
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;

@@ -1,0 +1,18 @@
+import {NativeScriptConfig} from '@nativescript/core';
+
+let myAppId = 'org.nativescript' + '.myApp'
+
+export default {
+	id: myAppId,
+	// @ts-ignore
+	appResourcesPath: nonExistentVariable,
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
