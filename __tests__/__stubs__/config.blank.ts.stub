@@ -1,0 +1,5 @@
+import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+
+} as NativeScriptConfig;

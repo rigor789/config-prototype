@@ -1,5 +1,124 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`ConfigTransformer can add a new nested property 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		},
+        nonExistent: 'now it exists'
+    }
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer can add a new nested property with new key 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	},
+    noParent: {
+        nonExistent: 'now it exists'
+    }
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer can add a new property 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	},
+    nonExistent: 'now it exists'
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer can add deeply nested property 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+    android: {
+        nonExistent: {
+            deep: 'now it exists deep'
+        }
+    }
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer can add deeply nested property to existing deeply nested object 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial',
+                nonExistent: {
+                    deep: 'now it exists deep'
+                }
+            }
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer can add deeply nested property to existing object 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		},
+        nonExistent: {
+            deep: 'now it exists deep'
+        }
+    }
+} as NativeScriptConfig;
+"
+`;
+
 exports[`ConfigTransformer throws if variable is not defined 1`] = `
 "import {NativeScriptConfig} from '@nativescript/core';
 
@@ -31,6 +150,25 @@ export default {
 	id: myAppId,
 	// @ts-ignore
 	appResourcesPath: nonExistentVariable,
+	android: {
+		v8Flags: '--expose_gc',
+		markingMode: 'none',
+		deep: {
+			nested: {
+				value: 'initial'
+			}
+		}
+	}
+} as NativeScriptConfig;
+"
+`;
+
+exports[`ConfigTransformer throws if we are trying to set a nested property on an existing string value 1`] = `
+"import {NativeScriptConfig} from '@nativescript/core';
+
+export default {
+	id: 'org.nativescript.myApp',
+	appResourcesPath: 'App_Resources',
 	android: {
 		v8Flags: '--expose_gc',
 		markingMode: 'none',

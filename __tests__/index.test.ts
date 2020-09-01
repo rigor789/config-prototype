@@ -120,4 +120,55 @@ describe('ConfigTransformer', () => {
 		config.setValue('id', 'new.id')
 		expect(config.getValue('id')).toBe('new.id')
 	})
+
+	it('can add a new property', () => {
+		setupConfig()
+		expect(config.getValue('nonExistent')).toBe(undefined)
+		config.setValue('nonExistent', 'now it exists')
+		expect(config.getValue('nonExistent')).toBe('now it exists')
+	})
+
+	it('can add a new nested property', () => {
+		setupConfig()
+		expect(config.getValue('android.nonExistent')).toBe(undefined)
+		config.setValue('android.nonExistent', 'now it exists')
+		expect(config.getValue('android.nonExistent')).toBe('now it exists')
+	})
+
+	it('can add a new nested property with new key', () => {
+		setupConfig()
+		expect(config.getValue('noParent.nonExistent')).toBe(undefined)
+		config.setValue('noParent.nonExistent', 'now it exists')
+		expect(config.getValue('noParent.nonExistent')).toBe('now it exists')
+	})
+
+	it('can add deeply nested property', () => {
+		setupConfig('blank')
+		expect(config.getValue('android.nonExistent.deep')).toBe(undefined)
+		config.setValue('android.nonExistent.deep', 'now it exists deep')
+		expect(config.getValue('android.nonExistent.deep')).toBe('now it exists deep')
+	})
+
+	it('can add deeply nested property to existing object', () => {
+		setupConfig()
+		expect(config.getValue('android.nonExistent.deep')).toBe(undefined)
+		config.setValue('android.nonExistent.deep', 'now it exists deep')
+		expect(config.getValue('android.nonExistent.deep')).toBe('now it exists deep')
+	})
+
+	it('can add deeply nested property to existing deeply nested object', () => {
+		setupConfig()
+		expect(config.getValue('android.deep.nested.nonExistent.deep')).toBe(undefined)
+		config.setValue('android.deep.nested.nonExistent.deep', 'now it exists deep')
+		expect(config.getValue('android.deep.nested.nonExistent.deep')).toBe('now it exists deep')
+	})
+
+	it('throws if we are trying to set a nested property on an existing string value', () => {
+		setupConfig()
+		expect(config.getValue('android.v8Flags.nested')).toBe(undefined)
+		expect(() => {
+			config.setValue('android.v8Flags.nested', 'now it exists deep')
+		}).toThrow(`Could not add property 'nested'.`)
+		expect(config.getValue('android.v8Flags.nested')).toBe(undefined)
+	})
 })
